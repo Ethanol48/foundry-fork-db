@@ -112,6 +112,27 @@ impl BlockchainDb {
     pub const fn db(&self) -> &Arc<MemDb> {
         &self.db
     }
+
+    pub fn insert_or_update_accounts(&self, data: Map<Address, AccountInfo>) {
+        let mut acc = self.db.accounts.write();
+        for (key, value) in data {
+            acc.insert(key, value);
+        }
+    }
+
+    pub fn insert_or_update_storage(&self, data: Map<Address, StorageInfo>) {
+        let mut stg = self.db.storage.write();
+        for (key, value) in data {
+            stg.insert(key, value);
+        }
+    }
+
+    pub fn insert_or_update_block_hashes(&self, data: Map<U256, B256>) {
+        let mut block = self.db.block_hashes.write();
+        for (key, value) in data {
+            block.insert(key, value);
+        }
+    }
 }
 
 /// relevant identifying markers in the context of [BlockchainDb]
@@ -263,18 +284,20 @@ impl MemDb {
         self.block_hashes.write().clear();
     }
 
-    // Inserts the account, replacing it if it exists already
-    pub fn do_insert_account(&self, address: Address, account: AccountInfo) {
-        self.accounts.write().insert(address, account);
-    }
+    // // Inserts the account, replacing it if it exists already
+    // pub fn do_insert_account(&self, address: Address, account: AccountInfo) {
+    //     self.accounts.write().insert(address, account);
+    // }
 
-    pub fn do_insert_storage(&self, address: Address, storage: StorageInfo) {
-        self.storage.write().insert(address, storage)
-    }
+    // // Inserts the storage, replacing it if it exists already
+    // pub fn do_insert_storage(&self, address: Address, storage: StorageInfo) {
+    //     self.storage.write().insert(address, storage);
+    // }
 
-    pub fn do_insert_block_hash(&self, block_number: U256, hash: B256) {
-        self.block_hashes.write().insert(block_number, hash);
-    }
+    // // Inserts the block hash, replacing it if it exists already
+    // pub fn do_insert_block_hash(&self, block_number: U256, hash: B256) {
+    //     self.block_hashes.write().insert(block_number, hash);
+    // }
 
     /// The implementation of [DatabaseCommit::commit()]
     pub fn do_commit(&self, changes: Map<Address, Account>) {
