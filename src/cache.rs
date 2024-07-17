@@ -268,6 +268,14 @@ impl MemDb {
         self.accounts.write().insert(address, account);
     }
 
+    pub fn do_insert_storage(&self, address: Address, storage: StorageInfo) {
+        self.storage.write().insert(address, storage)
+    }
+
+    pub fn do_insert_block_hash(&self, block_number: U256, hash: B256) {
+        self.block_hashes.write().insert(block_number, hash);
+    }
+
     /// The implementation of [DatabaseCommit::commit()]
     pub fn do_commit(&self, changes: Map<Address, Account>) {
         let mut storage = self.storage.write();
