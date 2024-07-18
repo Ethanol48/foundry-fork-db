@@ -112,27 +112,6 @@ impl BlockchainDb {
     pub const fn db(&self) -> &Arc<MemDb> {
         &self.db
     }
-
-    pub fn insert_or_update_accounts(&self, data: Map<Address, AccountInfo>) {
-        let mut acc = self.db.accounts.write();
-        for (key, value) in data {
-            acc.insert(key, value);
-        }
-    }
-
-    pub fn insert_or_update_storage(&self, data: Map<Address, StorageInfo>) {
-        let mut stg = self.db.storage.write();
-        for (key, value) in data {
-            stg.insert(key, value);
-        }
-    }
-
-    pub fn insert_or_update_block_hashes(&self, data: Map<U256, B256>) {
-        let mut block = self.db.block_hashes.write();
-        for (key, value) in data {
-            block.insert(key, value);
-        }
-    }
 }
 
 /// relevant identifying markers in the context of [BlockchainDb]
